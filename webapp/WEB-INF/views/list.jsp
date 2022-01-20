@@ -14,6 +14,7 @@
 	<P>
 		<a href="http://localhost:8088/phonebook4/phone/writeForm">연락처 추가하기(절대경로 absolute path)</a> 
 		<br>
+		<!-- /WEB-INF/views/WEB-INF/views/writeForm.jsp.jsp -->
 		 <a href="/phonebook4/phone/writeForm">연락처 추가하기(상대경로 relative path)</a>
 	</p>
 	<p>model2 방식으로 만든 전화번호부4</p>
@@ -35,8 +36,8 @@
 				<td>${personVo.company}</td>
 			</tr>
 			<tr>
-				<td><a href="/phonebook4/phone/updateForm?id=${personVo.personId }">수정</a></td>
-				<td><a href="/phonebook4/phone/delete?id=${personVo.personId }">삭제</a></td>
+				<td><a href="/phonebook4/phone/updateForm?personId=${personVo.personId }">수정</a></td>
+				<td><a href="/phonebook4/phone/delete?personId=${personVo.personId }">삭제</a></td>
 			</tr>
 		</table>
 		<br>

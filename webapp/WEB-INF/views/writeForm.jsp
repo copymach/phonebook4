@@ -10,7 +10,7 @@
 	<h2>전화번호 등록폼</h2>
 	<p>전화번호를 등록하려면 아래 항목을 기입하고 등록 버튼을 누르세요</p>
 
-	<form action="/phonebook3/phone/write" method="get"> 
+	<form action="/phonebook4/phone/write" method="get"> 
 		<!-- get방식으로 하면 파라미터가 보임 post방식으로 하면 안보임 개발중이니 일단 get방식-->
 		이름(name) : <input type="text" name="name" value=""> 
 		<br>
@@ -21,7 +21,6 @@
 		히든처리할 액션-스프링에서 생략 : <!-- <input type="text" name="action" value="write"> -->
 		<br>
 		<button type="submit">전송</button>
-		<!-- http://localhost:8088/phonebook3/phone/write?name=asd&hp=123&company=123 -->
 	</form>
 	
 	<a href="http://localhost:8088/phonebook3/phone/list">리스트 (절대경로)</a>

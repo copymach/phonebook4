@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="phonebook">
+
+	<!-- 쿼리문 작성 -->
+	<!-- com.javaex.vo.PersonVo 완성하고 키보드 컨트롤키 누르면 해당경로 이동가능 -->
+	<select id="selectList" resultType="com.javaex.vo.PersonVo">
+		<![CDATA[
+			select person_id personId, name, hp, company 
+			from person
+			order by person_id desc
+		]]>
+	</select>
+	
+	<insert id="insert" parameterType="com.javaex.vo.PersonVo">
+		<![CDATA[
+		INSERT INTO person 
+		VALUES (seq_person_id.nextval
+		, #{name}
+		, #{hp}
+		, #{company}
+		)
+		]]>
+	</insert>
+	
+	<delete id="delete" parameterType="int" >
+		<![CDATA[
+			DELETE FROM person 
+			WHERE person_id = #{personId}
+		]]>
+	</delete>
+	
+	<select id="selectOne" resultType="com.javaex.vo.PersonVo">
+		<![CDATA[
+			select	person_id personId
+					, name
+					, hp
+					, company 
+			from	person
+			where	person_id = #{personId}
+		]]>
+	</select>
+	
+	<update id="update" parameterType="com.javaex.vo.PersonVo">
+		<![CDATA[
+			UPDATE person
+			SET hp = #{hp}
+				,company = #{company}
+			WHERE person_id = #{personId} 
+		]]>
+	</update>
+	
+</mapper>
+

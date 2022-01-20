@@ -12,7 +12,7 @@
 	<h2>전화번호 수정폼</h2>
 	<p>전화번호를 수정하려면 아래 항목을 기입하고 수정 버튼을 누르세요</p>
 
-	<form action="/phonebook3/phone/update" method="get">
+	<form action="/phonebook4/phone/update" method="get">
 		이름(name) : <input type="text" name="name" value="${personVo.name }"> 
 		<br> 
 		핸드폰(hp) : <input type="text" name="hp" value="${personVo.hp }"> 
@@ -26,8 +26,8 @@
 		<!-- http://localhost:8088/phonebook3/phone/update?name=2233&hp=33&company=33&id=34 -->
 	</form>
 	<br>
-	<a href="http://localhost:8088/phonebook3/phone/list">리스트 (절대경로)</a>
+	<a href="http://localhost:8088/phonebook4/phone/list">리스트 (절대경로)</a>
 	<br>
-	<a href="/phonebook3/phone/list">리스트로 돌아가기 (상대경로)</a>
+	<a href="/phonebook4/phone/list">리스트로 돌아가기 (상대경로)</a>
 </body>
 </html>

@@ -1,15 +1,8 @@
 package com.javaex.dao;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
-import javax.sql.DataSource;
-
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +13,58 @@ public class PhoneDao {
 
 //	필드
 	@Autowired
-	DataSource dataSource; // import javax.sql.DataSource 임포트 확인 - 잘못가져오면 에러
+	private SqlSession sqlSession;
+	
+//	전체 연락처 가져오기
+	public List<PersonVo> getPersonList() {
+		
+		List<PersonVo> personList = sqlSession.selectList("phonebook.selectList");
+		return personList;
+	}
+	
+//	전화번호 추가
+	public int personInsert(PersonVo personVo) {
+		int count = sqlSession.insert("phonebook.insert", personVo);
+		return count;
+	}
+	
+	
+//	전화번호 삭제
+	public int personDelete(int personId) {
+		System.out.println("PhoneDao.personDelete()");
+		
+		int count = sqlSession.delete("phonebook.delete", personId);
+		
+		return count;
+	}
+
+//	수정용 1명 정보 가져오기
+	public PersonVo personSelectOne(int personId) {
+		return sqlSession.selectOne("phonebook.selectOne", personId); 
+	}
+	
+//	전화번호 수정
+	public int personUpdate(PersonVo personVo) {
+		System.out.println("PhoneDao.personUpdate()");		
+		int count = sqlSession.update("phonebook.update", personVo); 
+		return count; 
+	}
+	
+	/*
+//	private DataSource dataSource; // import javax.sql.DataSource 임포트 확인 - 잘못가져오면 에러
+	
+//	private List<PersonVo> getList() {
+//		List<PersonVo> personList = new ArrayList<PersonVo>();
+//		System.out.println(PhoneDao);
+		
+//		List<PersonVo> getList = sqlSession.selectList("phonebook.selectList");
+//		System.out.println(getList);
+		
+		
+//		return personList;
+//	}
+	
+	
 	
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
@@ -31,7 +75,11 @@ public class PhoneDao {
 	}
 //	메소드gs
 
+	
+	
 //	메소드일반
+	
+	/*
 	private void getConnection() {
 
 		try {
@@ -45,7 +93,9 @@ public class PhoneDao {
 			System.out.println("error:" + e);
 		}
 	} // getConn 종료
-
+	*/
+	
+	/*
 	private void close() {
 
 		try {
@@ -63,7 +113,46 @@ public class PhoneDao {
 		}
 
 	} // close 종료
+	
 
+//	겟리스트 데이터 (select 에서 출력 부분 빼버림)	셀렉터만 따로 메서드로 빼버림 
+	public List<PersonVo> getList() {
+		List<PersonVo> personList = new ArrayList<PersonVo>();
+
+		this.getConnection();
+
+		try {
+			String query = "";
+			query += " select   person_id pid, ";
+			query += "          name, ";
+			query += "          hp, ";
+			query += "          company ";
+			query += " from person ";
+			query += " order by person_id desc ";
+
+			pstmt = conn.prepareStatement(query);
+
+			rs = pstmt.executeQuery();
+
+			while (rs.next()) {
+				int personId = rs.getInt("pid");
+				String name = rs.getString("name");
+				String hp = rs.getString("hp");
+				String company = rs.getString("company");
+
+				PersonVo vo = new PersonVo(personId, name, hp, company);
+				personList.add(vo);
+			}
+
+		} catch (SQLException e) {
+			System.out.println("error:" + e);
+		}
+		this.close();
+
+		return personList;
+	} // getList 종료
+	
+	
 //	전화번호 추가	
 	public void contactsInput(PersonVo personVo) {
 
@@ -103,6 +192,7 @@ public class PhoneDao {
 
 	} // 전화번호 추가 ContactsInput 종료
 
+	
 	// 전화번호 삭제
 	public void contactsRemove(int index) {
 
@@ -241,11 +331,11 @@ public class PhoneDao {
 
 		this.getConnection();
 
-		Scanner sc = new Scanner(System.in); // 루프 오류방지 close 는 하지 않는다
-		sc.nextLine(); // 개행문자 처리
+//		Scanner sc = new Scanner(System.in); // 루프 오류방지 close 는 하지 않는다
+//		sc.nextLine(); // 개행문자 처리
 		System.out.println("<5.검색>");
 		System.out.print(">검색어: ");
-		String search = sc.nextLine();
+//		String search = sc.nextLine();
 
 		try {
 			String query = "";
@@ -258,9 +348,9 @@ public class PhoneDao {
 
 			pstmt = conn.prepareStatement(query);
 
-			pstmt.setString(1, "%" + search + "%");
-			pstmt.setString(2, "%" + search + "%");
-			pstmt.setString(3, "%" + search + "%");
+//			pstmt.setString(1, "%" + search + "%");
+//			pstmt.setString(2, "%" + search + "%");
+//			pstmt.setString(3, "%" + search + "%");
 
 			rs = pstmt.executeQuery();
 
@@ -285,44 +375,7 @@ public class PhoneDao {
 
 		return personList;
 	} // personSearch 종료
-
-//	겟리스트 데이터 (select 에서 출력 부분 빼버림)	셀렉터만 따로 메서드로 빼버림 
-	public List<PersonVo> getList() {
-		List<PersonVo> personList = new ArrayList<PersonVo>();
-
-		this.getConnection();
-
-		try {
-			String query = "";
-			query += " select   person_id pid, ";
-			query += "          name, ";
-			query += "          hp, ";
-			query += "          company ";
-			query += " from person ";
-			query += " order by person_id desc ";
-
-			pstmt = conn.prepareStatement(query);
-
-			rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				int personId = rs.getInt("pid");
-				String name = rs.getString("name");
-				String hp = rs.getString("hp");
-				String company = rs.getString("company");
-
-				PersonVo vo = new PersonVo(personId, name, hp, company);
-				personList.add(vo);
-			}
-
-		} catch (SQLException e) {
-			System.out.println("error:" + e);
-		}
-		this.close();
-
-		return personList;
-	} // getList 종료
-
+	
 	public void printList() {
 
 		for (PersonVo personvo : this.personSearch()) {
@@ -376,5 +429,6 @@ public class PhoneDao {
 		return personVo;
 
 	} // getPerson 종료
-
+	
+	*/
 }
