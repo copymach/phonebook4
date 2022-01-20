@@ -1,7 +1,6 @@
 package com.javaex.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,6 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.javaex.vo.PersonVo;
@@ -17,14 +19,12 @@ import com.javaex.vo.PersonVo;
 public class PhoneDao {
 
 //	필드
+	@Autowired
+	DataSource dataSource; // import javax.sql.DataSource 임포트 확인 - 잘못가져오면 에러
+	
 	private Connection conn = null;
 	private PreparedStatement pstmt = null;
 	private ResultSet rs = null;
-
-	private String driver = "oracle.jdbc.driver.OracleDriver";
-	private String url = "jdbc:oracle:thin:@localhost:1521:xe";
-	private String id = "phonedb";
-	private String pw = "phonedb";
 
 //	생성자
 	public PhoneDao() {
@@ -35,14 +35,12 @@ public class PhoneDao {
 	private void getConnection() {
 
 		try {
-			// 1. JDBC 드라이버 (Oracle) 로딩
-			Class.forName(driver);
-
+//			드라이버 로딩 필요없음 - 데이터소스 안에서 자동로딩
+			
 			// 2. Connection 얻어오기
-			conn = DriverManager.getConnection(url, id, pw);
+			conn = dataSource.getConnection(); 
+//			DriverManager.getConnection(url, id, pw);
 
-		} catch (ClassNotFoundException e) {
-			System.out.println("error: 드라이버 로딩 실패 - " + e);
 		} catch (SQLException e) {
 			System.out.println("error:" + e);
 		}
