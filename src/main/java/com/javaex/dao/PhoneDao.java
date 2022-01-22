@@ -1,6 +1,8 @@
 package com.javaex.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +30,25 @@ public class PhoneDao {
 		return count;
 	}
 	
+//	http://localhost:8088/phonebook4/phone/write2?name=pp&hp=pp&company=pp
+	public int personInsert2(String name, String hp, String company) {
+		
+//		map<키,값>
+		Map<String, String> personMap = new HashMap<String, String>();
+		personMap.put("name", name);
+		personMap.put("hp", hp);
+		personMap.put("company", company);
+		System.out.println(personMap);
+		
+//		personMpa.get("name");
+		name = "홍길동";
+		hp = "010-2222-3333";
+		company = "02-4444-3333";
+		
+		int count = sqlSession.insert("phonebook.insert2");
+		
+		return count;
+	}
 	
 //	전화번호 삭제
 	public int personDelete(int personId) {
@@ -38,10 +59,30 @@ public class PhoneDao {
 		return count;
 	}
 
+	
 //	수정용 1명 정보 가져오기
 	public PersonVo personSelectOne(int personId) {
 		return sqlSession.selectOne("phonebook.selectOne", personId); 
 	}
+	
+	
+//	수정용 1명 정보 가져오기
+	public PersonVo personSelectOne2(int personId) {
+		System.out.println("PhoneDao 1명정보 가져오기");
+		
+		Map<String, String> personMap = sqlSession.selectOne("phonebook.selectPerson");
+		
+		System.out.println(personMap.keySet());
+		System.out.println(personMap);
+		
+		System.out.println(personMap.get("NAME")); // 대문자로 입력하기
+		System.out.println(personMap.get("PERSON_ID")); // 대문자로 입력하기
+		
+//		sqlSession.selectOne("phonebook.selectOne", personId);
+		
+		return null; 
+	}
+	
 	
 //	전화번호 수정
 	public int personUpdate(PersonVo personVo) {

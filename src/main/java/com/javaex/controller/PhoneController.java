@@ -19,7 +19,6 @@ import com.javaex.vo.PersonVo;
 public class PhoneController {
 
 //	필드
-	
 	@Autowired
 	private PhoneDao phoneDao;
 //	 = new PhoneDao();
@@ -67,14 +66,26 @@ public class PhoneController {
 //		값 잘 받는지 확인
 		System.out.println("스프링이 가져온 personVo " + personVo);
 
-//		리다이렉트 - 루트 /phone 빼먹지 말자  
-//		return "redirect:/phone/list";
-
 //		리다이렉트는 jsp 가필요없어서 뷰 리졸브를 거칠 필요가 없다 디스패처서블릿에서 바로 클라로 피드백
 		return "redirect:list";
 		
 	} // write 종료
 	
+	
+//	디스패쳐 서블릿에게 personVo를 묶어오라는 코드
+	@RequestMapping(value = "/write2", method = { RequestMethod.GET, RequestMethod.POST })
+	public String write2(@RequestParam("name") String name, 
+						@RequestParam("hp") String hp,
+						@RequestParam("company") String company) {
+		System.out.println("PhoneController > write2() ");
+
+		// 저장하는 로직
+		phoneDao.personInsert2(name, hp, company);
+
+//		리다이렉트는 jsp 가필요없어서 뷰 리졸브를 거칠 필요가 없다 디스패처서블릿에서 바로 클라로 피드백
+		return "redirect:list";
+		
+	} // write 종료
 	
 	@RequestMapping(value = "/delete", method = { RequestMethod.GET, RequestMethod.POST })
 	public String delete (@RequestParam("personId") int personId) {
@@ -179,6 +190,7 @@ public class PhoneController {
 	
 
 //	없는 파라미터 처리 해보기
+//	http://localhost:8088/phonebook4/phone/write2?name=nn&hp=nn&company=nn
 	@RequestMapping(value = "/view2", method = { RequestMethod.GET, RequestMethod.POST })
 	public String view2 (@RequestParam(value="name") String name ,
 						@RequestParam(value="age", required=false, defaultValue = "-1") int age) {
